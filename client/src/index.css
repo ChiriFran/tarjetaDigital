@@ -1,0 +1,29 @@
+/* index.css o App.css */
+@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Lobster&display=swap');
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Variables y estilos globales */
+:root {
+  --main-font: "Alfa Slab One";
+  --main-color: #B66E41;
+  --detail-color: #D4AF7F;
+  --bg-color: #F8F4F0;
+
+  font-family: var(--main-font);
+  font-weight: 400;
+  color: var(--main-color);
+}
+
+body {
+  font-family: var(--main-font);
+  font-weight: 400;
+  color: var(--main-color);
+  background-color: var(--bg-color);
+}
