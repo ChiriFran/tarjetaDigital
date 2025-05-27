@@ -27,15 +27,34 @@ const PasswordOverlay = ({ musicRef }) => {
     useEffect(() => {
         if (isVisible && !isHiding) {
             const tl = gsap.timeline();
-            tl.fromTo(containerRef.current, { x: '-100%', opacity: 0 }, { x: '0%', opacity: 1, duration: 1 });
-            tl.fromTo('.title', { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5 });
-            tl.fromTo('.subtitle', { y: -10, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5 }, "-=0.3");
+            tl.fromTo(containerRef.current,
+                { x: '-100%', opacity: 0 },
+                { x: '0%', opacity: 1, duration: 0.5 }  // antes 1
+            );
+            tl.fromTo('.password-container-title',
+                { y: -20, opacity: 0 },
+                { y: 0, opacity: 1, duration: 0.25 }  // antes 0.5
+            );
+            tl.fromTo('.password-container-subtitle',
+                { y: -10, opacity: 0 },
+                { y: 0, opacity: 1, duration: 0.25 },
+                "-=0.15"  // antes "-=0.3"
+            );
 
             if (!passwordPreviouslyEntered) {
-                tl.fromTo('.input', { y: -10, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5 });
-                tl.fromTo('.button', { y: -10, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5 });
+                tl.fromTo('.input',
+                    { y: -10, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 0.25 }  // antes 0.5
+                );
+                tl.fromTo('.button',
+                    { y: -10, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 0.25 }  // antes 0.5
+                );
             } else {
-                tl.fromTo('.button', { y: -10, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5 });
+                tl.fromTo('.button',
+                    { y: -10, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 0.25 }  // antes 0.5
+                );
             }
         }
     }, [isVisible, isHiding, passwordPreviouslyEntered]);
@@ -47,7 +66,7 @@ const PasswordOverlay = ({ musicRef }) => {
         gsap.to(containerRef.current, {
             x: '-100%',
             opacity: 0,
-            duration: 0.8,
+            duration: 0.4,  // antes 0.8
             ease: 'power3.in',
             onComplete: () => {
                 setIsVisible(false);
@@ -55,6 +74,7 @@ const PasswordOverlay = ({ musicRef }) => {
                 document.body.style.overflow = 'auto';
             },
         });
+
     };
 
     const handleSubmit = (e) => {
