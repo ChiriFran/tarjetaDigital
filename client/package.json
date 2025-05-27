@@ -12,6 +12,7 @@
     "deploy": "vite build && gh-pages -d dist"
   },
   "dependencies": {
+    "firebase": "^11.8.1",
     "gsap": "^3.13.0",
     "normalize.css": "^8.0.1",
     "react": "^19.1.0",
