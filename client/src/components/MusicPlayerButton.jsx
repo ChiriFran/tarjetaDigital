@@ -11,7 +11,10 @@ const MusicPlayerButton = () => {
 
   useEffect(() => {
     if (audioRef.current) {
-      audioRef.current.volume = 0.3; // volumen al 50%
+      audioRef.current.volume = 0.3; // volumen al 30%
+      audioRef.current.currentTime = 0; // reinicia la canción
+      audioRef.current.pause(); // se asegura que esté pausada al principio
+      setIsPlaying(false); // estado también reiniciado
     }
 
     const canScroll = document.body.scrollHeight > window.innerHeight;
@@ -27,7 +30,7 @@ const MusicPlayerButton = () => {
 
     window.addEventListener('scroll', handleScroll, { once: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [hasScrolled]);
+  }, []);
 
   const togglePlay = () => {
     if (isPlaying) {
