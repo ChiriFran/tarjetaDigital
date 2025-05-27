@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import '../styles/AttendanceConfirmation.css';
-import iconConfirmacion from '../../media/icons/carta.webp'
+import iconConfirmacion from '../../media/icons/carta.webp';
 
 // Importar Firebase Firestore
 import { collection, addDoc, doc, updateDoc, increment, getDoc } from "firebase/firestore";
@@ -23,6 +23,7 @@ const AttendanceConfirmation = () => {
     const [datos, setDatos] = useState([
         { nombre: '', apellido: '', alimentacion: 'Ninguno' },
     ]);
+    const [isSubmitting, setIsSubmitting] = useState(false); // Estado para saber si está enviando
 
     const handleCantidadChange = (e) => {
         const nuevaCantidad = parseInt(e.target.value);
@@ -39,7 +40,6 @@ const AttendanceConfirmation = () => {
         setDatos(nuevosDatos);
     };
 
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -51,6 +51,8 @@ const AttendanceConfirmation = () => {
             alert('Por favor completá todos los campos.');
             return;
         }
+
+        setIsSubmitting(true); // Activo estado enviando
 
         try {
             const invitados = datos.map(({ nombre, apellido, alimentacion }) => ({
@@ -70,8 +72,6 @@ const AttendanceConfirmation = () => {
             });
 
             const alimentacionDocRef = doc(db, "invitados", "alimentacion");
-
-            // Obtener documento actual para saber qué campos existen
             const alimentacionDocSnap = await getDoc(alimentacionDocRef);
             if (!alimentacionDocSnap.exists()) {
                 throw new Error("El documento 'invitados/alimentacion' no existe.");
@@ -94,7 +94,7 @@ const AttendanceConfirmation = () => {
 
             datos.forEach(({ alimentacion }) => {
                 const key = mapAlimentacion[alimentacion];
-                if (key && key in alimentacionData) { // SOLO si el campo ya existe en Firestore
+                if (key && key in alimentacionData) {
                     incrementos[key] = (incrementos[key] || 0) + 1;
                 }
             });
@@ -114,6 +114,8 @@ const AttendanceConfirmation = () => {
             console.error("Error al guardar o actualizar en Firestore:", error);
             alert('Hubo un error al guardar los datos. Por favor, intentá nuevamente.');
         }
+
+        setIsSubmitting(false); // Desactivo estado enviando
     };
 
     return (
@@ -129,6 +131,7 @@ const AttendanceConfirmation = () => {
                     className="select-cantidad"
                     value={cantidadPersonas}
                     onChange={handleCantidadChange}
+                    disabled={isSubmitting} // Opcional: deshabilitar select mientras envía
                 >
                     {Array.from({ length: 10 }, (_, i) => (
                         <option key={i} value={i + 1}>
@@ -146,6 +149,7 @@ const AttendanceConfirmation = () => {
                             value={persona.nombre}
                             onChange={(e) => handleChange(index, 'nombre', e.target.value)}
                             required
+                            disabled={isSubmitting} // Deshabilitar input mientras envía
                         />
                         <input
                             type="text"
@@ -153,11 +157,13 @@ const AttendanceConfirmation = () => {
                             value={persona.apellido}
                             onChange={(e) => handleChange(index, 'apellido', e.target.value)}
                             required
+                            disabled={isSubmitting}
                         />
                         <label className='restriccionAlimentariaTitle'>Restricción alimentaria:</label>
                         <select
                             value={persona.alimentacion}
                             onChange={(e) => handleChange(index, 'alimentacion', e.target.value)}
+                            disabled={isSubmitting}
                         >
                             {opcionesAlimentacion.map((op, i) => (
                                 <option key={i} value={op}>
@@ -168,8 +174,12 @@ const AttendanceConfirmation = () => {
                     </div>
                 ))}
 
-                <button type="submit" className="boton-enviar">
-                    Enviar
+                <button
+                    type="submit"
+                    className="boton-enviar"
+                    disabled={isSubmitting} // Deshabilitar botón mientras envía
+                >
+                    {isSubmitting ? "Enviando..." : "Enviar"}
                 </button>
             </form>
         </div>
