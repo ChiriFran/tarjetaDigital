@@ -2,6 +2,11 @@ import React, { useState } from 'react';
 import '../styles/AttendanceConfirmation.css';
 import iconConfirmacion from '../../media/icons/carta.webp'
 
+// Importar Firebase Firestore
+import { collection, addDoc, doc, updateDoc, increment, getDoc } from "firebase/firestore";
+import { db } from "../firebase/config";
+
+// Opciones alimentación
 const opcionesAlimentacion = [
     'Ninguno',
     'Vegetariano',
@@ -34,7 +39,8 @@ const AttendanceConfirmation = () => {
         setDatos(nuevosDatos);
     };
 
-    const handleSubmit = (e) => {
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const formularioCompleto = datos.every(
@@ -46,12 +52,68 @@ const AttendanceConfirmation = () => {
             return;
         }
 
-        console.log('Datos enviados:', datos);
-        alert('Asistencia confirmada. ¡Gracias!');
+        try {
+            const invitados = datos.map(({ nombre, apellido, alimentacion }) => ({
+                invitado: `${nombre.trim()} ${apellido.trim()}`,
+                restriccionAlimentaria: alimentacion || 'Ninguno',
+            }));
 
-        // 🔁 Reiniciar a 1 persona con campos vacíos
-        setCantidadPersonas(1);
-        setDatos([{ nombre: '', apellido: '', alimentacion: 'Ninguno' }]);
+            await addDoc(collection(db, "confirmados"), {
+                cantidad: cantidadPersonas,
+                invitados: invitados,
+                fechaConfirmacion: new Date(),
+            });
+
+            const cantidadDocRef = doc(db, "invitados", "cantidad");
+            await updateDoc(cantidadDocRef, {
+                total: increment(cantidadPersonas)
+            });
+
+            const alimentacionDocRef = doc(db, "invitados", "alimentacion");
+
+            // Obtener documento actual para saber qué campos existen
+            const alimentacionDocSnap = await getDoc(alimentacionDocRef);
+            if (!alimentacionDocSnap.exists()) {
+                throw new Error("El documento 'invitados/alimentacion' no existe.");
+            }
+
+            const alimentacionData = alimentacionDocSnap.data();
+
+            const mapAlimentacion = {
+                'Ninguno': 'ninguno',
+                'Vegetariano': 'vegetariano',
+                'Vegano': 'vegano',
+                'Celíaco': 'celiaco',
+                'Diabético': 'diabetico',
+                'Hipertenso': 'hipertenso',
+                'Intolerante a la lactosa': 'lactosa',
+                'Otro': null
+            };
+
+            const incrementos = {};
+
+            datos.forEach(({ alimentacion }) => {
+                const key = mapAlimentacion[alimentacion];
+                if (key && key in alimentacionData) { // SOLO si el campo ya existe en Firestore
+                    incrementos[key] = (incrementos[key] || 0) + 1;
+                }
+            });
+
+            for (const key in incrementos) {
+                incrementos[key] = increment(incrementos[key]);
+            }
+
+            if (Object.keys(incrementos).length > 0) {
+                await updateDoc(alimentacionDocRef, incrementos);
+            }
+
+            alert('Asistencia confirmada y guardada. ¡Gracias!');
+            setCantidadPersonas(1);
+            setDatos([{ nombre: '', apellido: '', alimentacion: 'Ninguno' }]);
+        } catch (error) {
+            console.error("Error al guardar o actualizar en Firestore:", error);
+            alert('Hubo un error al guardar los datos. Por favor, intentá nuevamente.');
+        }
     };
 
     return (
@@ -112,7 +174,6 @@ const AttendanceConfirmation = () => {
             </form>
         </div>
     );
-
 };
 
 export default AttendanceConfirmation;
