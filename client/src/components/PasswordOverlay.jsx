@@ -82,7 +82,7 @@ const PasswordOverlay = ({ musicRef }) => {
 
         if (!passwordPreviouslyEntered) {
             const enteredPassword = inputRef.current.value;
-            if (enteredPassword === 'boda') {
+            if (enteredPassword === import.meta.env.VITE_PASSWORD) {
                 localStorage.setItem('passwordOverlayDismissed', 'true');
                 setPasswordPreviouslyEntered(true);
                 setError('');
