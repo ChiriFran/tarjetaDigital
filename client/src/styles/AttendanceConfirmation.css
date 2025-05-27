@@ -100,4 +100,8 @@
     .label-cantidad {
         font-size: 1rem;
     }
+
+    .form-container {
+        margin: 30px 15px;
+    }
 }

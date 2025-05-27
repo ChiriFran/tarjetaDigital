@@ -18,6 +18,7 @@ import img2 from '../media/hero/hero-desktop-2.jpg';
 import img3 from '../media/hero/hero-desktop-3.jpg';
 
 function App() {
+  const musicRef = useRef();
   const gallerySet1 = [img2, img1, img3];
   const gallerySet2 = [img3, img1, img2];
 
@@ -26,7 +27,7 @@ function App() {
 
   return (
     <>
-      <PasswordOverlay />
+      <PasswordOverlay musicRef={musicRef} />
 
       <FadeInSection><Hero /></FadeInSection>
       <FadeInSection><Countdown targetDate="2025-09-10T17:00:00" /></FadeInSection>
@@ -47,7 +48,7 @@ function App() {
       <FadeInSection><FooterMessage /></FadeInSection>
 
       {/* Botón con scroll hacia Attendance */}
-      <FloatingButtons attendanceRef={attendanceRef} />
+      <FloatingButtons attendanceRef={attendanceRef} musicRef={musicRef} />
     </>
   );
 }

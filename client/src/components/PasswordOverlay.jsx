@@ -2,7 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import '../styles/PasswordOverlay.css';
 import { gsap } from 'gsap';
 
-const PasswordOverlay = () => {
+import iconAudioOn from '../../media/icons/musicOn.webp'
+import iconAudioOff from '../../media/icons/musicOff.webp'
+
+const PasswordOverlay = ({ musicRef }) => {
     const [isVisible, setIsVisible] = useState(false);
     const [isHiding, setIsHiding] = useState(false);
     const [passwordPreviouslyEntered, setPasswordPreviouslyEntered] = useState(false);
@@ -24,86 +27,56 @@ const PasswordOverlay = () => {
     useEffect(() => {
         if (isVisible && !isHiding) {
             const tl = gsap.timeline();
-
-            tl.fromTo(
-                containerRef.current,
-                { x: '-100%', opacity: 0 },
-                { x: '0%', opacity: 1, duration: 1, ease: 'power3.out' }
-            );
-
-            tl.fromTo('.title',
-                { y: -20, opacity: 0 },
-                { y: 0, opacity: 1, duration: 0.5 }
-            );
-
-            tl.fromTo('.subtitle',
-                { y: -10, opacity: 0 },
-                { y: 0, opacity: 1, duration: 0.5 },
-                "-=0.3"
-            );
+            tl.fromTo(containerRef.current, { x: '-100%', opacity: 0 }, { x: '0%', opacity: 1, duration: 1 });
+            tl.fromTo('.title', { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5 });
+            tl.fromTo('.subtitle', { y: -10, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5 }, "-=0.3");
 
             if (!passwordPreviouslyEntered) {
-                tl.fromTo('.input',
-                    { y: -10, opacity: 0 },
-                    { y: 0, opacity: 1, duration: 0.5 }
-                );
-
-                tl.fromTo('.button',
-                    { y: -10, opacity: 0 },
-                    { y: 0, opacity: 1, duration: 0.5 }
-                );
+                tl.fromTo('.input', { y: -10, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5 });
+                tl.fromTo('.button', { y: -10, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5 });
             } else {
-                tl.fromTo('.button',
-                    { y: -10, opacity: 0 },
-                    { y: 0, opacity: 1, duration: 0.5 }
-                );
+                tl.fromTo('.button', { y: -10, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5 });
             }
         }
     }, [isVisible, isHiding, passwordPreviouslyEntered]);
 
+    const closeOverlay = (playMusic = true) => {
+        setIsHiding(true);
+        if (playMusic && musicRef?.current) musicRef.current.playMusic();
+
+        gsap.to(containerRef.current, {
+            x: '-100%',
+            opacity: 0,
+            duration: 0.8,
+            ease: 'power3.in',
+            onComplete: () => {
+                setIsVisible(false);
+                setIsHiding(false);
+                document.body.style.overflow = 'auto';
+            },
+        });
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // solo si no pasó la contraseña antes, chequeamos input
         if (!passwordPreviouslyEntered) {
             const enteredPassword = inputRef.current.value;
-
             if (enteredPassword === 'boda') {
                 localStorage.setItem('passwordOverlayDismissed', 'true');
                 setPasswordPreviouslyEntered(true);
                 setError('');
-                setIsHiding(true);
-
-                gsap.to(containerRef.current, {
-                    x: '-100%',
-                    opacity: 0,
-                    duration: 0.8,
-                    ease: 'power3.in',
-                    onComplete: () => {
-                        setIsVisible(false);
-                        setIsHiding(false);
-                        document.body.style.overflow = 'auto';
-                    },
-                });
+                closeOverlay(true); // activa música
             } else {
                 setError('Contraseña incorrecta.');
             }
         } else {
-            // Si ya pasó la contraseña antes y solo clickea el botón
-            setIsHiding(true);
-
-            gsap.to(containerRef.current, {
-                x: '-100%',
-                opacity: 0,
-                duration: 0.8,
-                ease: 'power3.in',
-                onComplete: () => {
-                    setIsVisible(false);
-                    setIsHiding(false);
-                    document.body.style.overflow = 'auto';
-                },
-            });
+            closeOverlay(true); // activa música
         }
+    };
+
+    const handleNoMusic = () => {
+        closeOverlay(false); // sin música
     };
 
     if (!isVisible) return null;
@@ -111,24 +84,22 @@ const PasswordOverlay = () => {
     return (
         <div className="password-overlay" ref={overlayRef}>
             <div className="password-container" ref={containerRef}>
-                <h2 className="title">Bienvenidos</h2>
-                <p className="subtitle">
+                <h2 className="password-container-title">Bienvenidos</h2>
+                <p className="password-container-subtitle">
                     NOS EMBARCAMOS EN UNA AVENTURA Y NUESTRA BODA NO ESTARÍA COMPLETA SIN TU PRESENCIA
                 </p>
-                {!passwordPreviouslyEntered && (
+                {!passwordPreviouslyEntered ? (
                     <form onSubmit={handleSubmit}>
-                        <input
-                            className="input"
-                            type="password"
-                            placeholder="Ingresá la contraseña"
-                            ref={inputRef}
-                        />
+                        <input className="input" type="text" placeholder="Ingresá la contraseña" ref={inputRef} />
                         {error && <p className='error'>{error}</p>}
-                        <button className="button" type="submit">Ingresar</button>
+                        <button className="button" type="submit"><img src={iconAudioOn} alt="music on" />Ingresar con música</button>
+                        <button className="button" type="button" onClick={handleNoMusic}><img src={iconAudioOff} alt="music off" />Ingresar sin música</button>
                     </form>
-                )}
-                {passwordPreviouslyEntered && (
-                    <button className="button" onClick={handleSubmit}>Ingresar</button>
+                ) : (
+                    <>
+                        <button className="button" onClick={handleSubmit}><img src={iconAudioOn} alt="music on" />Ingresar con música</button>
+                        <button className="button" onClick={handleNoMusic}><img src={iconAudioOff} alt="music off" />Ingresar sin música</button>
+                    </>
                 )}
             </div>
         </div>
