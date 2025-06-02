@@ -48,12 +48,12 @@
 
 .heroNames {
     position: absolute;
-    bottom: 0;
+    bottom: -10%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 2;
     font-family: 'Great Vibes', cursive;
-    font-size: 10rem;
+    font-size: 8rem;
     /* más grande si querés que destaque */
     color: #f8f4f0;
     font-weight: 400;
@@ -69,8 +69,7 @@
 
     /* Texto en la esquina inferior derecha */
     .heroNames {
-        bottom: 5px;
-        right: 5px;
         font-size: 4rem;
+        bottom: -5%;
     }
 }
