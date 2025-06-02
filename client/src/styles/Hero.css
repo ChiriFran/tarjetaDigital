@@ -1,3 +1,10 @@
+@font-face {
+    font-family: 'Great Vibes';
+    src: url('../../media/fonts/GreatVibes-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 .heroContainer {
     width: 100%;
     height: 80vh;
@@ -22,17 +29,36 @@
     z-index: 0;
 }
 
-/* Texto en la esquina inferior derecha */
+/* Difuminado elegante al final del hero */
+.heroMask::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 15%;
+    background: linear-gradient(to top,
+            #F8F4F0 0%,
+            rgba(255, 255, 255, 0.8) 10%,
+            rgba(255, 255, 255, 0.4) 30%,
+            transparent 100%);
+    z-index: 1;
+    pointer-events: none;
+}
+
 .heroNames {
     position: absolute;
-    bottom: 20px;
-    right: 30px;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 2;
-    /* importante: encima de la máscara */
-    font-size: 1.8rem;
-    color: var(--detail-color);
+    font-family: 'Great Vibes', cursive;
+    font-size: 10rem;
+    /* más grande si querés que destaque */
+    color: #f8f4f0;
     font-weight: 400;
     letter-spacing: 1px;
+    text-align: center;
 }
 
 /* Imagen para mobile */
@@ -45,6 +71,6 @@
     .heroNames {
         bottom: 5px;
         right: 5px;
-        font-size: 1.2rem;
+        font-size: 4rem;
     }
 }
