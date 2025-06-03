@@ -1,26 +1,102 @@
-.introMessageContainer{
+.introMessageContainer {
+    position: relative;
     display: flex;
     flex-flow: column;
     align-items: center;
     justify-content: center;
-    padding: 5rem 0;
+    padding: 8rem 0;
     background-color: var(--main-color);
     color: #F8F4F0;
+    font-family: 'Courier New', Courier, monospace;
+    overflow: hidden;
 }
 
-.introMessageContainer h2{
+.introMessageContainer::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url(../../media/canva/flores-arriba.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 450px;
+    z-index: 10;
+}
+
+.introMessageContainer h2 {
+    position: relative;
     border-top: 1px solid #F8F4F0;
     border-bottom: 1px solid #F8F4F0;
     padding: 3rem 2rem;
     text-align: center;
+    font-size: 1.5rem;
     font-weight: 400;
+    width: 80%;
+}
+
+.introMessageContainer h2::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -3%;
+    width: 15%;
+    height: 100%;
+    background-image: url(../../media/canva/flor-parada-claro.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    z-index: 10;
+}
+
+.introMessageContainer h2::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -3%;
+    width: 15%;
+    height: 100%;
+    background-image: url(../../media/canva/flor-parada-claro.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    z-index: 10;
 }
 
 @media (max-width: 480px) {
-    .introMessageContainer h2{
-    border-top: none;
-    border-bottom: none;
-    padding: 1rem 0.5rem;
-}
+
+    .introMessageContainer::before {
+        content: '';
+        position: absolute;
+        bottom: -20%;
+        left: 30%;
+        width: 100%;
+        height: 80%;
+        background-image: url(../../media/canva/flor-parada-2.png);
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 150px;
+        z-index: 10;
+    }
+
+    .introMessageContainer::after {
+        background-size: 350px;
+    }
+
+    .introMessageContainer h2 {
+        border-top: none;
+        border-bottom: none;
+        padding: 1rem 0.5rem;
+        font-size: 1rem;
+    }
+
+    .introMessageContainer h2::before {
+        display: none;
+    }
+
+    .introMessageContainer h2::after {
+        display: none;
+    }
 
 }

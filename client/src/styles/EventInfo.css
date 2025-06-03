@@ -7,8 +7,23 @@
     padding: 3rem;
     box-sizing: border-box;
     text-align: center;
-    font-family: Arial, sans-serif;
+    font-family: 'Courier New', Courier, monospace;
     background-color: #F8F4F0;
+}
+
+.event-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url(../../media/canva/fondo-flores.png);
+    background-position: top;
+    background-repeat: repeat;
+    background-size: 600px;
+    opacity: 0.05;
+    z-index: 0;
 }
 
 .event-info-list {
@@ -26,11 +41,12 @@
 }
 
 .event-card__title {
-    font-size: 1.5rem;
+    font-size: 3.5rem;
     font-weight: 600;
     margin-bottom: 4rem;
     color: var(--main-color);
-    text-transform: uppercase;
+    font-family: 'Great Vibes', 'cursive';
+
 }
 
 .event-card__details {
@@ -48,23 +64,28 @@
 }
 
 .event-card__detail-title {
-    font-weight: 500;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 900;
     font-size: 1.1rem;
     margin-bottom: 4px;
 }
 
 .event-card__detail-title-top-botom {
+    font-family: 'Courier New', Courier, monospace;
     font-size: 1.5rem;
 }
 
 .event-card__detail-subtitle {
+    font-family: 'Courier New', Courier, monospace;
     font-size: 0.9rem;
     color: var(--main-color);
     margin-bottom: 3rem;
 }
 
 .event-card__detail-subtitle-top-botom {
+    font-family: 'Courier New', Courier, monospace;
     font-size: 1.5rem;
+    font-weight: 700;
     margin: 1.5rem;
 }
 
@@ -98,11 +119,11 @@
 @media (max-width: 480px) {
     .event-card {
         max-width: 90%;
-        padding: 15px;
+        padding: 2rem;
     }
 
     .event-card__title {
-        font-size: 1.3rem;
+        font-size: 3rem;
     }
 
     .event-card__details {

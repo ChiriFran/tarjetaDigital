@@ -10,6 +10,7 @@
   align-items: center;
   background-color: var(--main-color);
   border: 2px solid #F8F4F0;
+  font-family: 'Courier New', Courier, monospace;
 }
 
 .music-button {
@@ -49,7 +50,7 @@
 
 @media screen and (max-width: 768px) {
   .floating-buttons {
-  bottom: 5px;
-  right: 5px;
+    bottom: 5px;
+    right: 5px;
   }
 }

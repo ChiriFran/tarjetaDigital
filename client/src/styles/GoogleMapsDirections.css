@@ -7,6 +7,7 @@
     flex-wrap: wrap;
     background-color: #F8F4F0;
     color: var(--main-color);
+    font-family: 'Courier New', Courier, monospace;
 }
 
 .mapa-seccion {
@@ -27,14 +28,14 @@
 
 .mapa-seccion h2 {
     margin-bottom: 8px;
-    font-weight: 400;
+    font-weight: 700;
     z-index: 10;
 }
 
 .mapa-seccion p {
     margin-bottom: 12px;
     font-size: 1rem;
-    font-weight: 400;
+    font-weight: 700;
     text-align: center;
 }
 
@@ -49,9 +50,10 @@
     margin-top: 1rem;
     padding: 10px 20px;
     background-color: #ffffff;
+    border: 2px solid rgb(230, 172, 114);
     color: var(--main-color);
     text-decoration: none;
-    font-weight: 40;
+    font-weight: 700;
     transition: 0.3s ease-in-out;
 }
 
@@ -71,6 +73,6 @@
     }
 
     .mapa-seccion iframe {
-        height: 300px;
+        height: 220px;
     }
 }
